@@ -1,5 +1,9 @@
 import React,{useState,FormEvent} from 'react'
 
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "test-token");
+myHeaders.append("Content-Type", "application/json");
+
 type Trip= {
     id: number;
     name: string;
@@ -23,8 +27,10 @@ export default function NewTripFrom(props:Props):JSX.Element{
     })
     const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
-        props.trips.push(NewTrip)
+        fetch(`http://localhost:3000/api/trips`,{method:'POST',headers: myHeaders,body:JSON.stringify(NewTrip),redirect: 'follow' })
+        
     }
+    
     function changeValue(key:string,value:any){
         setNewTrip({...NewTrip,[key]:value})
     }
@@ -49,7 +55,7 @@ export default function NewTripFrom(props:Props):JSX.Element{
             <label>image:
                 <input type='text' value={NewTrip.image} onChange={(e)=>changeValue('image',e.target.value)}/>
             </label>
-            <input type="submit"/>
+            <input type="submit" />
         </form>
     )
 }
